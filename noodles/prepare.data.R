@@ -12,10 +12,10 @@ if (!suppressWarnings(require('differential.coverage')))
 }
 
 noodles.M.loaded<-FALSE
-# we can the whole thing to noodles.M.Rda
-if(file.exists('noodles.M.Rda'))
+# we prepare: noodles and all the bedfile stuff and methylation - to 5types.meth.data.Rda
+if(file.exists('5types.meth.data.Rda'))
 {
-	loaded<-load('noodles.M.Rda')
+	loaded<-load('5types.meth.data.Rda')
 	if ('noodles.M.methylation' %in% loaded) 
 		if (class(noodles.M.methylation)=='data.frame')
 			if ('noodles.M' %in% loaded)
@@ -25,13 +25,18 @@ if(file.exists('noodles.M.Rda'))
 
 if(!noodles.M.loaded)
 {
-	beddir<-'../../../../Methylation/bedfiles/'
+	beddir<-'../../cancer_bed_files/'
 	noodle.length<-1000
 	chrs<-nucl.chromosomes.hg19()
-	noodles.M<-prepare.uniform.noodles(chrs,noodle.length)
-	bedfiles<-dir(beddir) 
-	bedfiles<-bedfiles[grep('All_',bedfiles,invert=TRUE)] # remove two 'All_' files
-	bed.ids<-sapply(strsplit(bedfiles,split='_'),function(x){if(x[2]!='DNA') x[2] else x[3]}) #somhere id in pos 2, somewhere in 3
+	if(!'noodles.M' %in% ls()) 
+		noodles.M<-prepare.covering.noodles(chrs,noodle.length)
+	bedfiles<-dir(beddir)
+	typenames<-substr(bedfiles,0,2)
+	typenames<-replace(typenames,typenames=='M_','M')
+	typenames<-replace(typenames,typenames=='N_','N')
+	bed.ids<-sapply(strsplit(split = '_',bedfiles),function(s){paste0(s[1],'_',s[2])})
+	if(length(unique(bed.ids))!=length(bed.ids))
+		stop('Non-unique bed.ids. So what?')
 	noodles.M.methylation<-CountCoverageOfNoodles(noodles.M,paste0(beddir,bedfiles),bed.ids)
-	save(file='noodles.M.Rda',list=c('noodles.M','noodles.M.methylation','bed.ids','noodle.length'))
+	save(file='5types.meth.data.Rda',list=c('noodles.M','noodles.M.methylation','typenames','bed.ids','noodle.length'))
 }
