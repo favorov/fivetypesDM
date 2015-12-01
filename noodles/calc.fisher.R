@@ -1,6 +1,6 @@
 if(! 'noodles.M.methylation' %in% ls()) load('5types.meth.data.Rda')
 noodles.M.p.values<-apply(
-	noodles.M.methylation[1:1000,],1,
+	noodles.M.methylation,1,
 	function(met) 
 	{
 		t<-table(typenames,as.logical(met))
