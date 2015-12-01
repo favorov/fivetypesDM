@@ -37,6 +37,6 @@ if(!noodles.M.loaded)
 	bed.ids<-sapply(strsplit(split = '_',bedfiles),function(s){paste0(s[1],'_',s[2])})
 	if(length(unique(bed.ids))!=length(bed.ids))
 		stop('Non-unique bed.ids. So what?')
-	noodles.M.methylation<-CountCoverageOfNoodles(noodles.M,paste0(beddir,bedfiles),bed.ids)
+	noodles.M.methylation<-count.coverage.of.noodles(noodles.M,paste0(beddir,bedfiles),bed.ids)
 	save(file='5types.meth.data.Rda',list=c('noodles.M','noodles.M.methylation','typenames','bed.ids','noodle.length'))
 }
