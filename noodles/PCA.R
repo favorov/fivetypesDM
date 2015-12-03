@@ -1,0 +1,15 @@
+load("noodles.M.significant.bonf.corr.Rda")
+#source('significant.probes.list.R')
+pca<-princomp(noodles.M.methylation.significant.bonf.corr,center=FALSE)
+Scol=c('red','blue','green','magenta','orange')
+names(Scol)<-unique(typenames)
+#plot 3 first components
+pdf('PCA_62_samples_8xx_probes.pdf')
+	plot(pca$load[,1],pca$load[,2], pch = 16,col=Scol[typenames])
+	plot(pca$load[,3],pca$load[,2], pch = 16,col=Scol[typenames])
+	plot(pca$load[,1],pca$load[,2], pch = 16,col=Scol[typenames])
+dev.off()
+# compute percent of explained variance
+pr1 = round(pca$sdev[1]/sum(pca$sdev)*100,0)
+pr2 = round(pca$sdev[2]/sum(pca$sdev)*100,0)
+pr3 = round(pca$sdev[3]/sum(pca$sdev)*100,0)
