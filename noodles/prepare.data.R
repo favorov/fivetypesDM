@@ -13,11 +13,19 @@ if (!suppressWarnings(require('differential.coverage')))
 
 noodles.M.loaded<-FALSE
 # we prepare: noodles and all the bedfile stuff and methylation - to 5types.meth.data.Rda
-if(file.exists('5types.meth.data.Rda'))
+
+#they are already here... ok
+if ('noodles.M.methylation' %in% ls()) 
+	if ('dgCMatrix' %in% class(noodles.M.methylation))
+		if ('noodles.M' %in% ls())
+			if(class(noodles.M)=='GRanges')
+				noodles.M.loaded<-TRUE
+
+if(!noodles.M.loaded && file.exists('5types.meth.data.Rda'))
 {
 	loaded<-load('5types.meth.data.Rda')
 	if ('noodles.M.methylation' %in% loaded) 
-		if (class(noodles.M.methylation)=='data.frame')
+		if ('dgCMatrix' %in% class(noodles.M.methylation))
 			if ('noodles.M' %in% loaded)
 				if(class(noodles.M)=='GRanges')
 			noodles.M.loaded<-TRUE
