@@ -22,7 +22,7 @@ noodles.M.methylation.boruta.ind<-
 	noodles.M.methylation.significant.bonf.corr.ind[features.ind,]
 
 pdf('heatmap.boruta.filtered.pdf')
-heatmap(noodles.m.methylation.boruta,ColSideColors = Scol[typenames])
+heatmap(noodles.M.methylation.boruta,ColSideColors = Scol[typenames])
 dev.off()
 
 pdf('heatmap.boruta.bin.filtered.pdf')
