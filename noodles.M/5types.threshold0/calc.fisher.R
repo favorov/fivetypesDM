@@ -1,4 +1,4 @@
-source('prepare.data.R')
+source('../prepare.data.R')
 if(! 'noodles.M.methylation' %in% ls()) stop('data is not prepared!')
 
 noodles.M.p.values.loaded<-FALSE
@@ -30,5 +30,5 @@ if(!noodles.M.p.values.loaded)
 				1.
 		}
 	)
-	save(file='5types.p.values.Rda',list=c('noodles.M.p.values'))
+	save(file='p.values.Rda',list=c('noodles.M.p.values','typenames'))
 }
