@@ -1,3 +1,4 @@
+#to be started from subfolders
 if (!suppressWarnings(require('differential.coverage')))
 {
 	if (!suppressWarnings(require('devtools')))
