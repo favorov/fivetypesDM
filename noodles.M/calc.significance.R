@@ -10,7 +10,7 @@ if(file.exists('significant.DM.Rda'))
 	if ('significant.p.values' %in% loaded) 
 		if (class('significant.p.values')=='numeric')
 			if (length(noodles.M)==length(significant.p.values))
-				significant.p.values<-TRUE
+				significant.DM.loaded<-TRUE
 }
 
 
@@ -44,7 +44,7 @@ if(!significant.DM.loaded)
 	}
 	which.probes.are.significant<-which(noodles.M.p.values*length(noodles.M.p.values)<0.05) #bonferroni correction
 	significant.DM.probes<-noodles.M[which.probes.are.significant]
-	significant.DM.methylation<-noodles.M.methylation[which.probes.are.significant,]
+	significant.DM.methylation<-as.matrix(noodles.M.methylation[which.probes.are.significant,])
 	significant.DM.methylation.binarised<-0+(as.matrix(significant.DM.methylation)>threshold) # 0/1
 	significant.p.values<-noodles.M.p.values[which.probes.are.significant]
 	save(file='significant.DM.Rda',list=c('significant.DM.probes','significant.DM.methylation','significant.DM.methylation.binarised','significant.p.values','test.typenames'))

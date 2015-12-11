@@ -41,14 +41,13 @@ PCA2Dplot<-function(pca,col='blue',n=3,pdfname=paste0('PCA_2D ',gsub(':',' ',dat
 	dev.off()
 }
 
-#load("noodles.M.significant.bonf.corr.Rda")
-source('significant.probes.list.R')
+load("significant.DM.Rda")
 Scol=c('red','blue','green','magenta','orange')
-names(Scol)<-unique(typenames)
-pca<-princomp(noodles.M.methylation.significant.bonf.corr,center=FALSE)
-PCA2Dplot(pca,col=Scol[typenames],pdfname='PCA_62_samples_2D.pdf')
-PCA3Dplot(pca,col=Scol[typenames],pdfname='PCA_62_samples_3D.pdf')
+names(Scol)<-unique(test.typenames)
+pca<-princomp(significant.DM.methylation,center=FALSE)
+PCA2Dplot(pca,col=Scol[test.typenames],pdfname='PCA_62_samples_2D.pdf')
+PCA3Dplot(pca,col=Scol[test.typenames],pdfname='PCA_62_samples_3D.pdf')
 
-pcaind<-princomp(noodles.M.methylation.significant.bonf.corr.ind,center=FALSE)
-PCA2Dplot(pca,col=Scol[typenames],pdfname='PCA_62_samples_bin_2D.pdf')
-PCA3Dplot(pca,col=Scol[typenames],pdfname='PCA_62_samples_bin_3D.pdf')
+pcaind<-princomp(significant.DM.methylation.binarised,center=FALSE)
+PCA2Dplot(pca,col=Scol[test.typenames],pdfname='PCA_62_samples_bin_2D.pdf')
+PCA3Dplot(pca,col=Scol[test.typenames],pdfname='PCA_62_samples_bin_3D.pdf')

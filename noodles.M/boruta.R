@@ -1,33 +1,44 @@
-source('significant.probes.list.R')
 library(Boruta)
+load("significant.DM.Rda")
 
-Scol=c('red','blue','green','magenta','orange')
-names(Scol)<-unique(typenames)
+boruta.selected.loaded<-FALSE
+if(file.exists('boruta.selected.Rda'))
+{
+	loaded<-load('boruta.selected.Rda')
+	if ('boruta.selected.methylation' %in% loaded) 
+		if (class(boruta.selected.methylation)=='matrix')
+			boruta.selected.loaded<-TRUE
+}
 
-boruta.result<-Boruta(t(as.matrix(noodles.M.methylation.significant.bonf.corr)),as.factor(typenames))
+if(!boruta.selected.loaded)
+{
+	Scol=c('red','blue','green','magenta','orange')
+	names(Scol)<-unique(test.typenames)
 
-noodles.M.methylation.significant.bonf.corr.ind<-0+(as.matrix(noodles.M.methylation.significant.bonf.corr)>0)
+	boruta.result<-Boruta(t(significant.DM.methylation),as.factor(test.typenames))
 
-boruta.result.ind<-Boruta(t(noodles.M.methylation.significant.bonf.corr.ind),as.factor(typenames))
+	boruta.result.bin<-Boruta(t(significant.DM.methylation.binarised),as.factor(test.typenames))
 
-features<-which(boruta.result$finalDecision=='Confirmed')
-features.ind<-which(boruta.result.ind$finalDecision=='Confirmed')
+	features<-which(boruta.result$finalDecision=='Confirmed')
+	features.bin<-which(boruta.result.bin$finalDecision=='Confirmed')
 
-noodles.M.boruta<-noodles.M.significant.bonf.corr[features]
-noodles.M.boruta.ind<-noodles.M.significant.bonf.corr[features.ind]
+	boruta.selected.probes<-significant.DM.probes[features]
+	boruta.bin.selected.probes<-significant.DM.probes[features.bin]
 
-noodles.M.methylation.boruta<-
-	as.matrix(noodles.M.methylation.significant.bonf.corr[features,])
-noodles.M.methylation.boruta.ind<-
-	noodles.M.methylation.significant.bonf.corr.ind[features.ind,]
+	boruta.selected.methylation<-significant.DM.methylation[features,]
+	rownames(boruta.selected.methylation)<-sub('-(.*)','',as.character(boruta.selected.probes))
+	
+	boruta.bin.selected.methylation<-significant.DM.methylation.binarised[features.bin,]
+	rownames(boruta.bin.selected.methylation)<-sub('-(.*)','',as.character(boruta.bin.selected.probes))
+
+	save(file='boruta.selected.Rda',list=c('boruta.selected.probes','boruta.bin.selected.probes','boruta.selected.methylation','boruta.bin.selected.methylation','Scol','test.typenames'))
+}
 
 pdf('heatmap.boruta.filtered.pdf')
-heatmap(noodles.M.methylation.boruta,ColSideColors = Scol[typenames])
+heatmap(boruta.selected.methylation,ColSideColors = Scol[test.typenames])
 dev.off()
 
 pdf('heatmap.boruta.bin.filtered.pdf')
-heatmap(noodles.M.methylation.boruta.ind,ColSideColors = Scol[typenames])
+heatmap(boruta.bin.selected.methylation,ColSideColors = Scol[test.typenames])
 dev.off()
-
-save(file='5types.boruta.Rda',list=c('noodles.M.boruta','noodles.M.boruta.ind','noodles.M.methylation.boruta','noodles.M.methylation.boruta.ind','Scol','typenames'))
 
