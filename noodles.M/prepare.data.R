@@ -21,9 +21,11 @@ if ('noodles.M.methylation' %in% ls())
 			if(class(noodles.M)=='GRanges')
 				noodles.M.loaded<-TRUE
 
-if(!noodles.M.loaded && file.exists('5types.meth.data.Rda'))
+#we run it from one of the location that are prticular cases of the pioeline,
+#but this part is common
+if(!noodles.M.loaded && file.exists('../5types.meth.data.Rda'))
 {
-	loaded<-load('5types.meth.data.Rda')
+	loaded<-load('../5types.meth.data.Rda')
 	if ('noodles.M.methylation' %in% loaded) 
 		if ('dgCMatrix' %in% class(noodles.M.methylation))
 			if ('noodles.M' %in% loaded)
@@ -46,5 +48,5 @@ if(!noodles.M.loaded)
 	if(length(unique(bed.ids))!=length(bed.ids))
 		stop('Non-unique bed.ids. So what?')
 	noodles.M.methylation<-count.coverage.of.noodles(noodles.M,paste0(beddir,bedfiles),bed.ids)
-	save(file='5types.meth.data.Rda',list=c('noodles.M','noodles.M.methylation','typenames','bed.ids','noodle.length'))
+	save(file='../5types.meth.data.Rda',list=c('noodles.M','noodles.M.methylation','typenames','bed.ids','noodle.length'))
 }

@@ -49,7 +49,6 @@ pca<-princomp(noodles.M.methylation.significant.bonf.corr,center=FALSE)
 PCA2Dplot(pca,col=Scol[typenames],pdfname='PCA_62_samples_2D.pdf')
 PCA3Dplot(pca,col=Scol[typenames],pdfname='PCA_62_samples_3D.pdf')
 
-noodles.M.methylation.significant.bonf.corr.ind<-0+(as.matrix(noodles.M.methylation.significant.bonf.corr)>0)
 pcaind<-princomp(noodles.M.methylation.significant.bonf.corr.ind,center=FALSE)
 PCA2Dplot(pca,col=Scol[typenames],pdfname='PCA_62_samples_bin_2D.pdf')
 PCA3Dplot(pca,col=Scol[typenames],pdfname='PCA_62_samples_bin_3D.pdf')
