@@ -1,4 +1,3 @@
-library(Boruta)
 load("significant.DM.Rda")
 
 boruta.selected.loaded<-FALSE
@@ -12,6 +11,13 @@ if(file.exists('boruta.selected.Rda'))
 
 if(!boruta.selected.loaded)
 {
+	if (!suppressWarnings(require('Boruta')))
+	{
+		source("http://bioconductor.org/biocLite.R")
+		biocLite("Boruta")
+		library("Boruta")
+	}
+
 	Scol=c('red','blue','green','magenta','orange')
 	names(Scol)<-unique(test.typenames)
 
