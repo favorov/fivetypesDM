@@ -36,7 +36,7 @@ if(!noodles.M.loaded && file.exists('../5types.meth.data.Rda'))
 
 if(!noodles.M.loaded)
 {
-	beddir<-'../../cancer_bed_files/'
+	beddir<-'../../../cancer_bed_files/'
 	noodle.length<-1000
 	chrs<-nucl.chromosomes.hg19()
 	if(!'noodles.M' %in% ls()) 
