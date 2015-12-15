@@ -1,7 +1,7 @@
 source('../prepare.data.R')
 if(! 'noodles.M.methylation' %in% ls()) stop('data is not prepared!')
 
-threshold<-200;
+threshold<-200; #inclusive
 test.typenames<-typenames;
 
 source('../calc.significance.R')
