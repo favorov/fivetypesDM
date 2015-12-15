@@ -33,7 +33,7 @@ if(!significant.DM.loaded)
 			noodles.M.methylation,1,
 			function(met) 
 			{
-				t<-table(test.typenames,met>threshold)
+				t<-table(test.typenames,met>=threshold)
 				if(dim(t)[2]==2)
 					fisher.test(t)$p.value
 				else
@@ -45,7 +45,7 @@ if(!significant.DM.loaded)
 	which.probes.are.significant<-which(noodles.M.p.values*length(noodles.M.p.values)<0.05) #bonferroni correction
 	significant.DM.probes<-noodles.M[which.probes.are.significant]
 	significant.DM.methylation<-as.matrix(noodles.M.methylation[which.probes.are.significant,])
-	significant.DM.methylation.binarised<-0+(as.matrix(significant.DM.methylation)>threshold) # 0/1
+	significant.DM.methylation.binarised<-0+(as.matrix(significant.DM.methylation)>=threshold) # 0/1
 	significant.p.values<-noodles.M.p.values[which.probes.are.significant]
 	save(file='significant.DM.Rda',list=c('significant.DM.probes','significant.DM.methylation','significant.DM.methylation.binarised','significant.p.values','test.typenames'))
 }
