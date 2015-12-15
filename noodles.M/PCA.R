@@ -44,8 +44,9 @@ PCA2Dplot<-function(pca,col='blue',n=3,pdfname=paste0('PCA_2D ',gsub(':',' ',dat
 load("significant.DM.Rda")
 Scol=c('red','blue','green','magenta','orange')
 names(Scol)<-unique(test.typenames)
-if (dim(significant.DM.methylation)[0]<dim(significant.DM.methylation[1]))
-	message('We omit PCA cauce number of features is not enough') else
+if (dim(significant.DM.methylation)[0]<dim(significant.DM.methylation)[1])
+	message('We omit PCA cause number of features is not enough') 
+else
 {
 	pca<-princomp(significant.DM.methylation,center=FALSE)
 	PCA2Dplot(pca,col=Scol[test.typenames],pdfname='PCA_62_samples_2D.pdf')
