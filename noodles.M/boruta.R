@@ -18,9 +18,6 @@ if(!boruta.selected.loaded)
 		library("Boruta")
 	}
 
-	Scol=c('red','blue','green','magenta','orange')
-	names(Scol)<-unique(test.typenames)
-
 	boruta.result<-Boruta(t(significant.DM.methylation),as.factor(test.typenames))
 
 	boruta.result.bin<-Boruta(t(significant.DM.methylation.binarised),as.factor(test.typenames))
