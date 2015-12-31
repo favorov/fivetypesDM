@@ -47,5 +47,5 @@ if(!significant.DM.loaded)
 	significant.DM.methylation<-as.matrix(noodles.M.methylation[which.probes.are.significant,])
 	significant.DM.methylation.binarised<-0+(as.matrix(significant.DM.methylation)>=threshold) # 0/1
 	significant.p.values<-noodles.M.p.values[which.probes.are.significant]
-	save(file='significant.DM.Rda',list=c('significant.DM.probes','significant.DM.methylation','significant.DM.methylation.binarised','significant.p.values','test.typenames'))
+	save(file='significant.DM.Rda',list=c('significant.DM.probes','significant.DM.methylation','significant.DM.methylation.binarised','significant.p.values','which.probes.are.significant','test.typenames'))
 }
