@@ -5,8 +5,8 @@ boruta.selected.loaded<-FALSE
 if(file.exists('boruta.selected.Rda'))
 {
 	loaded<-load('boruta.selected.Rda')
-	if ('boruta.selected.methylation' %in% loaded) 
-		if (class(boruta.selected.methylation)=='matrix')
+	if ('boruta.bin.selected.methylation' %in% loaded) 
+		if (class(boruta.bin.selected.methylation)=='matrix')
 			boruta.selected.loaded<-TRUE
 }
 
@@ -37,7 +37,7 @@ if(!boruta.selected.loaded)
 
 	save(file='boruta.selected.Rda',list=c(
 		#'features',
-		features.bin,
+		'features.bin',
 		#'boruta.selected.probes',
 		'boruta.bin.selected.probes',
 		#'boruta.selected.methylation',
@@ -46,9 +46,9 @@ if(!boruta.selected.loaded)
 		'test.typenames'))
 }
 
-pdf('heatmap.boruta.filtered.pdf')
-heatmap(boruta.selected.methylation,ColSideColors = Scol[test.typenames])
-dev.off()
+#pdf('heatmap.boruta.filtered.pdf')
+#heatmap(boruta.selected.methylation,ColSideColors = Scol[test.typenames])
+#dev.off()
 
 pdf('heatmap.boruta.bin.filtered.pdf')
 heatmap(boruta.bin.selected.methylation,ColSideColors = Scol[test.typenames])
@@ -58,7 +58,9 @@ dev.off()
 #print(as.data.frame(closest.gene.start.by.interval(noodles = boruta.selected.probes)))
 #sink()
 boruta.bin.selected.probes$'p-value'<-significant.p.values[features.bin]
+boruta.bin.selected.probes<-
+	closest.gene.start.by.interval(noodles = boruta.bin.selected.probes)
 sink('boruta.bin.selected.probes.txt')
-print(as.data.frame(closest.gene.start.by.interval(noodles = boruta.bin.selected.probes)))
+print(as.data.frame(boruta.bin.selected.probes))
 sink()
 
