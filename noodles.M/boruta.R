@@ -81,6 +81,7 @@ if(!boruta.annotated.loaded)
 #print(as.data.frame(closest.gene.start.by.interval(noodles = boruta.selected.probes)))
 #sink()
 
+options(width = 500) 
 sink('boruta.bin.selected.probes.txt')
 print(boruta.bin.selected.annotated.probes)
 sink()
