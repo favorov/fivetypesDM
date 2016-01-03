@@ -38,7 +38,7 @@ if(!noodles.M.loaded)
 {
 	beddir<-'../../../cancer_bed_files/'
 	noodle.length<-1000
-	chrs<-nucl.chromosomes.hg19()
+	chrs<-nucl.chromosomes.hg18()
 	if(!'noodles.M' %in% ls()) 
 		noodles.M<-prepare.covering.noodles(chrs,noodle.length)
 	bedfiles<-dir(beddir)
@@ -49,5 +49,5 @@ if(!noodles.M.loaded)
 	if(length(unique(bed.ids))!=length(bed.ids))
 		stop('Non-unique bed.ids. So what?')
 	noodles.M.methylation<-count.coverage.of.noodles(noodles.M,paste0(beddir,bedfiles),bed.ids)
-	save(file='../5types.meth.data.Rda',list=c('noodles.M','noodles.M.methylation','typenames','bed.ids','noodle.length'))
+	save(file='../5types.meth.data.Rda',list=c('noodles.M','noodles.M.methylation','typenames','bed.ids','beddir','bedfiles','noodle.length'))
 }
