@@ -54,13 +54,34 @@ pdf('heatmap.boruta.bin.filtered.pdf')
 heatmap(boruta.bin.selected.methylation,ColSideColors = Scol[test.typenames])
 dev.off()
 
+boruta.annotated.loaded<-FALSE
+if(file.exists('boruta.annotated.Rda'))
+{
+	loaded<-load('boruta.annotated.Rda')
+	if ('boruta.bin.selected.annotated.probes' %in% loaded) 
+		if (class(boruta.bin.selected.annotated.probes)=='data.frame')
+			boruta.annotated.loaded<-TRUE
+}
+
+if(!boruta.annotated.loaded)
+{
+	boruta.bin.selected.probes$'p.value'<-significant.p.values[features.bin]
+	boruta.bin.selected.probes<-
+		closest.gene.start.by.interval(noodles = boruta.bin.selected.probes,genome.id='hg18')
+	boruta.bin.selected.annotated.probes<-as.data.frame(boruta.bin.selected.probes)
+	peaks<-max.peak.score.for.each.noodle(noodles = boruta.bin.selected.probes,paste0(beddir,bedfiles),bed.ids)
+	score.annotation<-t(apply(peaks,1,function(a) unlist(tapply(a,typenames,function(a) c(min(a),median(a),max(a))))))
+	score.annotation.names<-do.call('paste',c(expand.grid(c('min','med','max'),unique(typenames)),sep='.'))
+	colnames(score.annotation)<-score.annotation.names
+	boruta.bin.selected.annotated.probes<-cbind(boruta.bin.selected.annotated.probes,score.annotation)
+	save(file='boruta.annotated.Rda',list=c('boruta.bin.selected.annotated.probes'))
+}
+
 #sink('boruta.selected.probes.txt')
 #print(as.data.frame(closest.gene.start.by.interval(noodles = boruta.selected.probes)))
 #sink()
-boruta.bin.selected.probes$'p.value'<-significant.p.values[features.bin]
-boruta.bin.selected.probes<-
-	closest.gene.start.by.interval(noodles = boruta.bin.selected.probes,genome.id='hg18')
+
 sink('boruta.bin.selected.probes.txt')
-print(as.data.frame(boruta.bin.selected.probes))
+print(boruta.bin.selected.annotated.probes)
 sink()
 
