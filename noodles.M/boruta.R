@@ -57,9 +57,9 @@ dev.off()
 #sink('boruta.selected.probes.txt')
 #print(as.data.frame(closest.gene.start.by.interval(noodles = boruta.selected.probes)))
 #sink()
-boruta.bin.selected.probes$'p-value'<-significant.p.values[features.bin]
+boruta.bin.selected.probes$'p.value'<-significant.p.values[features.bin]
 boruta.bin.selected.probes<-
-	closest.gene.start.by.interval(noodles = boruta.bin.selected.probes)
+	closest.gene.start.by.interval(noodles = boruta.bin.selected.probes,genome.id='hg18')
 sink('boruta.bin.selected.probes.txt')
 print(as.data.frame(boruta.bin.selected.probes))
 sink()
