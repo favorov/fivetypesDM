@@ -66,15 +66,37 @@ if(file.exists('boruta.annotated.Rda'))
 
 if(!boruta.annotated.loaded)
 {
+	#boruta.selected.probes is a GRanges; we start to annotate it
+	#first we add Fisher test p-values
 	boruta.bin.selected.probes$'p.value'<-significant.p.values[features.bin]
+	#now, we add closest genes (do not forget, hg 18!)
 	boruta.bin.selected.probes<-
 		closest.gene.start.by.interval(noodles = boruta.bin.selected.probes,genome.id='hg18')
+	#now, we need a data frame
 	boruta.bin.selected.annotated.probes<-as.data.frame(boruta.bin.selected.probes)
+	#let's create a noddles x samples table with the highes MACS peak scores
+	# for each noodle and sample
 	peaks<-max.peak.score.for.each.noodle(noodles = boruta.bin.selected.probes,paste0(beddir,bedfiles),bed.ids)
+	# and now, we aggregate min/med/max for all the samples of the a type for each noodle
+	#types are original 5 types
 	score.annotation<-t(apply(peaks,1,function(a) unlist(tapply(a,typenames,function(a) c(min(a),median(a),max(a))))))
-	score.annotation.names<-do.call('paste',c(expand.grid(c('min','med','max'),unique(typenames)),sep='.'))
-	colnames(score.annotation)<-score.annotation.names
+	#and add pretty colnames , min.M, med.T8, etc
+	colnames(score.annotation)<-do.call('paste',c(expand.grid(c('min','med','max'),unique(typenames)),sep='.'))
+	#and we bind it to the 	boruta.bin.selected.annotated.probes
 	boruta.bin.selected.annotated.probes<-cbind(boruta.bin.selected.annotated.probes,score.annotation)
+	#but, we can have some other that typenames types (like M+T6, etc)
+	#they are coded in test.typenames
+	if(!min(test.typenames==typenames))
+	{
+		score.annotation<-t(apply(peaks,1,function(a) unlist(tapply(a,test.typenames,function(a) c(min(a),median(a),max(a))))))
+		#and add pretty colnames , min.M, med.T8, etc
+		colnames(score.annotation)<-do.call('paste',c(expand.grid(c('min','med','max'),unique(test.typenames)),sep='.'))
+		#we need only those columns that are not already in boruta.bin.selected.annotated.probes  
+		score.annotation<-score.annotation[,!(colnames(score.annotation) %in% colnames(boruta.bin.selected.annotated.probes))]
+		#and we bind it to the 	boruta.bin.selected.annotated.probes
+		boruta.bin.selected.annotated.probes<-cbind(boruta.bin.selected.annotated.probes,score.annotation)
+	}
+
 	save(file='boruta.annotated.Rda',list=c('boruta.bin.selected.annotated.probes'))
 }
 
