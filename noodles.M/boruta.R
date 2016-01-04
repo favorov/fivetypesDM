@@ -22,7 +22,7 @@ if(!boruta.selected.loaded)
 	#boruta.result<-Boruta(t(significant.DM.methylation),as.factor(test.typenames))
 	set.seed("1248312")
 	
-	boruta.result.bin<-Boruta(t(significant.DM.methylation.binarised),as.factor(test.typenames))
+	boruta.result.bin<-Boruta(t(significant.DM.methylation.binarised),as.factor(test.typenames),maxRuns = 1000)
 
 	#features<-which(boruta.result$finalDecision=='Confirmed')
 	features.bin<-which(boruta.result.bin$finalDecision=='Confirmed')
