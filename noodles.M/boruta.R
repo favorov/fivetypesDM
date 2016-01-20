@@ -51,7 +51,7 @@ if(!boruta.selected.loaded)
 #heatmap(boruta.selected.methylation,ColSideColors = Scol[test.typenames])
 #dev.off()
 
-pdf('heatmap.boruta.bin.filtered.pdf')
+pdf('heatmap.boruta.bin.confirmed.pdf')
 heatmap(boruta.bin.selected.methylation,ColSideColors = Scol[test.typenames])
 dev.off()
 
