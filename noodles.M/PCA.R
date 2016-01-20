@@ -48,10 +48,15 @@ if (dim(significant.DM.methylation)[1] < dim(significant.DM.methylation)[2] )
 }	else
 {
 	pca<-princomp(significant.DM.methylation,center=FALSE)
-	PCA2Dplot(pca,col=Scol[test.typenames],pdfname='PCA_62_samples_2D.pdf')
-	PCA3Dplot(pca,col=Scol[test.typenames],pdfname='PCA_62_samples_3D.pdf')
-
+	if (dim(pca$load)[1]>=3)
+	{
+		PCA2Dplot(pca,col=Scol[test.typenames],pdfname='PCA_62_samples_2D.pdf')
+		PCA3Dplot(pca,col=Scol[test.typenames],pdfname='PCA_62_samples_3D.pdf')
+	}
 	pcaind<-princomp(significant.DM.methylation.binarised,center=FALSE)
-	PCA2Dplot(pca,col=Scol[test.typenames],pdfname='PCA_62_samples_bin_2D.pdf')
-	PCA3Dplot(pca,col=Scol[test.typenames],pdfname='PCA_62_samples_bin_3D.pdf')
+	if (dim(pcaind$load)[1]>=3)
+	{
+		PCA2Dplot(pca,col=Scol[test.typenames],pdfname='PCA_62_samples_bin_2D.pdf')
+		PCA3Dplot(pca,col=Scol[test.typenames],pdfname='PCA_62_samples_bin_3D.pdf')
+	}
 }
