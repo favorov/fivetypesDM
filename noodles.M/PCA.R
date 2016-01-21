@@ -42,21 +42,15 @@ PCA2Dplot<-function(pca,col='blue',n=3,pdfname=paste0('PCA_2D ',gsub(':',' ',dat
 }
 
 load("significant.DM.Rda")
-if (dim(significant.DM.methylation)[1] < dim(significant.DM.methylation)[2] )
+if (min(dim(significant.DM.methylation))<2 || dim(significant.DM.methylation)[1] < dim(significant.DM.methylation)[2] )
 {
 	message('We omit PCA cause number of features is not enough')
 }	else
 {
 	pca<-princomp(significant.DM.methylation,center=FALSE)
-	if (dim(pca$load)[1]>=3)
-	{
-		PCA2Dplot(pca,col=Scol[test.typenames],pdfname='PCA_62_samples_2D.pdf')
-		PCA3Dplot(pca,col=Scol[test.typenames],pdfname='PCA_62_samples_3D.pdf')
-	}
+	PCA2Dplot(pca,col=Scol[test.typenames],pdfname='PCA_62_samples_2D.pdf')
+	PCA3Dplot(pca,col=Scol[test.typenames],pdfname='PCA_62_samples_3D.pdf')
 	pcaind<-princomp(significant.DM.methylation.binarised,center=FALSE)
-	if (dim(pcaind$load)[1]>=3)
-	{
-		PCA2Dplot(pca,col=Scol[test.typenames],pdfname='PCA_62_samples_bin_2D.pdf')
-		PCA3Dplot(pca,col=Scol[test.typenames],pdfname='PCA_62_samples_bin_3D.pdf')
-	}
+	PCA2Dplot(pca,col=Scol[test.typenames],pdfname='PCA_62_samples_bin_2D.pdf')
+	PCA3Dplot(pca,col=Scol[test.typenames],pdfname='PCA_62_samples_bin_3D.pdf')
 }
