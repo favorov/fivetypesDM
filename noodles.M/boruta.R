@@ -12,21 +12,25 @@ if(file.exists('boruta.selected.Rda'))
 
 if(!boruta.selected.loaded)
 {
-	if (!suppressWarnings(require('Boruta')))
+	if (dim(significant.DM.methylation.binarised)[2] < 2)
 	{
-		source("http://bioconductor.org/biocLite.R")
-		biocLite("Boruta")
-		library("Boruta")
+		features.bin<-c(1)
+	} else {
+		if (!suppressWarnings(require('Boruta')))
+		{
+			source("http://bioconductor.org/biocLite.R")
+			biocLite("Boruta")
+			library("Boruta")
+		}
+
+		#boruta.result<-Boruta(t(significant.DM.methylation),as.factor(test.typenames))
+		set.seed("1248312")
+		
+		boruta.result.bin<-Boruta(t(significant.DM.methylation.binarised),as.factor(test.typenames),maxRuns = 1000)
+
+		#features<-which(boruta.result$finalDecision=='Confirmed')
+		features.bin<-which(boruta.result.bin$finalDecision=='Confirmed')
 	}
-
-	#boruta.result<-Boruta(t(significant.DM.methylation),as.factor(test.typenames))
-	set.seed("1248312")
-	
-	boruta.result.bin<-Boruta(t(significant.DM.methylation.binarised),as.factor(test.typenames),maxRuns = 1000)
-
-	#features<-which(boruta.result$finalDecision=='Confirmed')
-	features.bin<-which(boruta.result.bin$finalDecision=='Confirmed')
-
 	#boruta.selected.probes<-significant.DM.probes[features]
 	boruta.bin.selected.probes<-significant.DM.probes[features.bin]
 
@@ -34,7 +38,7 @@ if(!boruta.selected.loaded)
 	#rownames(boruta.selected.methylation)<-sub('-(.*)','',as.character(boruta.selected.probes))
 	
 	boruta.bin.selected.methylation<-significant.DM.methylation.binarised[features.bin,]
-	rownames(boruta.bin.selected.methylation)<-sub('-(.*)','',as.character(boruta.bin.selected.probes))
+	if(length(features.bin)>1) rownames(boruta.bin.selected.methylation)<-sub('-(.*)','',as.character(boruta.bin.selected.probes))
 
 	save(file='boruta.selected.Rda',list=c(
 		#'features',
@@ -51,9 +55,11 @@ if(!boruta.selected.loaded)
 #heatmap(boruta.selected.methylation,ColSideColors = Scol[test.typenames])
 #dev.off()
 
-pdf('heatmap.boruta.bin.confirmed.pdf')
-heatmap(boruta.bin.selected.methylation,ColSideColors = Scol[test.typenames])
-dev.off()
+if(min(boruta.bin.selected.methylation)>1){
+	pdf('heatmap.boruta.bin.confirmed.pdf')
+	heatmap(boruta.bin.selected.methylation,ColSideColors = Scol[test.typenames])
+	dev.off()
+}
 
 boruta.annotated.loaded<-FALSE
 if(file.exists('boruta.annotated.Rda'))
