@@ -94,7 +94,7 @@ if(!boruta.annotated.loaded)
 	#they are coded in test.typenames
 	if(!min(test.typenames==typenames))
 	{
-		score.annotation<-t(apply(peaks,1,function(a) unlist(tapply(a,test.typenames,function(a) c(min(a),median(a),max(a))))))
+		score.annotation<-data.frame(t(apply(peaks,1,function(a) unlist(tapply(a,test.typenames,function(a) c(min(a),median(a),max(a)))))))
 		#and add pretty colnames , min.M, med.T8, etc
 		colnames(score.annotation)<-do.call('paste',c(expand.grid(c('min','med','max'),unique(test.typenames)),sep='.'))
 		#we need only those columns that are not already in boruta.bin.selected.annotated.probes  
@@ -112,6 +112,6 @@ if(!boruta.annotated.loaded)
 
 options(width = 500) 
 sink('boruta.bin.selected.probes.txt')
-print(boruta.bin.selected.annotated.probes)
+write.table(boruta.bin.selected.annotated.probes,quote = FALSE,row.names = FALSE,sep='\t')
 sink()
 
