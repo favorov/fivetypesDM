@@ -55,12 +55,6 @@ if(!boruta.selected.loaded)
 #heatmap(boruta.selected.methylation,ColSideColors = Scol[test.typenames])
 #dev.off()
 
-if(min(dim(boruta.bin.selected.methylation))>1){
-	pdf('heatmap.boruta.bin.confirmed.pdf')
-	heatmap(boruta.bin.selected.methylation,ColSideColors = Scol[test.typenames])
-	dev.off()
-}
-
 boruta.annotated.loaded<-FALSE
 if(file.exists('boruta.annotated.Rda'))
 {
@@ -109,6 +103,12 @@ if(!boruta.annotated.loaded)
 #sink('boruta.selected.probes.txt')
 #print(as.data.frame(closest.gene.start.by.interval(noodles = boruta.selected.probes)))
 #sink()
+if(min(dim(boruta.bin.selected.methylation))>1){
+	pdf('heatmap.boruta.bin.confirmed.pdf')
+	heatmap(boruta.bin.selected.methylation,ColSideColors = Scol[test.typenames],scale='none')
+	dev.off()
+}
+
 
 options(width = 500) 
 sink('boruta.bin.selected.probes.txt')
