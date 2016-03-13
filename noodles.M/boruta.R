@@ -1,4 +1,6 @@
 library(differential.coverage)
+library(gplots)
+library(RColorBrewer)
 load("significant.DM.Rda")
 
 boruta.selected.loaded<-FALSE
@@ -97,18 +99,34 @@ if(!boruta.annotated.loaded)
 		boruta.bin.selected.annotated.probes<-cbind(boruta.bin.selected.annotated.probes,score.annotation)
 	}
 
-	save(file='boruta.annotated.Rda',list=c('boruta.bin.selected.annotated.probes'))
+	save(file='boruta.annotated.Rda',list=c('boruta.bin.selected.annotated.probes','peaks'))
 }
 
 #sink('boruta.selected.probes.txt')
 #print(as.data.frame(closest.gene.start.by.interval(noodles = boruta.selected.probes)))
 #sink()
+nr<-dim(boruta.bin.selected.methylation)[1]
+fntscale<-fntscale<-0.2 + 1/log10(nr)
+if (nr<25)	fntscale<-.75*fntscale
+if (nr<10)	fntscale<-.75*fntscale
+if (nr<5)	fntscale<-.5*fntscale
+
 if(min(dim(boruta.bin.selected.methylation))>1){
 	pdf('heatmap.boruta.bin.confirmed.pdf')
-	heatmap(boruta.bin.selected.methylation,ColSideColors = Scol[test.typenames],scale='none')
+	heatmap(boruta.bin.selected.methylation,ColSideColors = Scol[test.typenames],scale='none',cexRow=fntscale,col=brewer.pal(9,'Greys'))
 	dev.off()
 }
 
+peakk<-as.matrix(peaks)
+rownames(peakk)=rownames(boruta.bin.selected.methylation)
+
+roof<-1000
+
+if(min(dim(boruta.bin.selected.methylation))>1){
+	pdf('heatmap.boruta.pval.confirmed.pdf')
+	heatmap(pmin(peakk,roof),ColSideColors = Scol[test.typenames],scale='none',cexRow=fntscale,col=brewer.pal(9,'Greys'))
+	dev.off()
+}
 
 options(width = 500) 
 sink('boruta.bin.selected.probes.txt')
