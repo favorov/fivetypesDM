@@ -1,4 +1,5 @@
 #to be started from subfolders
+set.seed(1248312)
 if (!suppressWarnings(require('differential.coverage')))
 {
 	if (!suppressWarnings(require('devtools')))
